@@ -14,7 +14,7 @@ import java.util.UUID;
 
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -23,11 +23,12 @@ public class WinningNumbersGeneratorFacadeTest {
 
     private final WinningNumbersRepository winningNumbersRepository = new WinningNumbersRepositoryTestImpl();
     NumberReceiverFacade numberReceiverFacade = mock(NumberReceiverFacade.class);
+    private final OneRandomNumberFetcher fetcher = new SecureRandomOneNumberFetcher();
 
     @Test
     public void it_should_return_set_of_required_size() {
         //given
-        RandomNumberGenerable generator = new RandomGenerator();
+        RandomNumberGenerable generator = new RandomGenerator(fetcher);
         when(numberReceiverFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         WinningNumbersGeneratorFacade numbersGenerator = new NumberGeneratorConfiguration().createForTest(generator, winningNumbersRepository, numberReceiverFacade);
         //when
@@ -39,7 +40,7 @@ public class WinningNumbersGeneratorFacadeTest {
     @Test
     public void it_should_return_set_of_required_size_within_required_range() {
         //given
-        RandomNumberGenerable generator = new RandomGenerator();
+        RandomNumberGenerable generator = new RandomGenerator(fetcher);
         when(numberReceiverFacade.retrieveNextDrawDate()).thenReturn(LocalDateTime.now());
         WinningNumbersGeneratorFacade numbersGenerator = new NumberGeneratorConfiguration().createForTest(generator, winningNumbersRepository, numberReceiverFacade);
         //when
@@ -132,7 +133,7 @@ public class WinningNumbersGeneratorFacadeTest {
         //when
         boolean areWinningNumbersGeneratedByDate = numbersGenerator.areWinningNumbersGeneratedByDate();
         //then
-        Assertions.assertTrue(areWinningNumbersGeneratedByDate);
+        assertTrue(areWinningNumbersGeneratedByDate);
     }
 
 }

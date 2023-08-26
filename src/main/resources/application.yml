@@ -5,6 +5,7 @@ spring:
 
 lotto:
   number-generator:
+    lotteryRunOccurrence: "0 0 12 * * 6"
     facade:
       count: 25
       lowerBand: 1
@@ -12,7 +13,7 @@ lotto:
     http:
       client:
         config:
-          uri: http://www.randomnumberapi.com
-          port: 80
+          uri: http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com
+          port: 9090
           connectionTimeout: 5000
           readTimeout: 5000

@@ -9,3 +9,4 @@ public record WinningNumbersGeneratorFacadeConfigurationProperties(int count,
                                                                    int lowerBand,
                                                                    int upperBand) {
 }
+

@@ -1,5 +1,7 @@
 package pl.lotto.domain.resultchecker;
 
+import java.util.List;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import pl.lotto.domain.numbergenerator.WinningNumbersGeneratorFacade;
 import pl.lotto.domain.numbergenerator.dto.WinningNumbersDto;
@@ -7,10 +9,6 @@ import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
-
-import java.util.List;
-import java.util.Set;
-
 import static pl.lotto.domain.resultchecker.ResultCheckerMapper.mapPlayersToResults;
 
 @AllArgsConstructor
@@ -20,7 +18,6 @@ public class ResultCheckerFacade {
     NumberReceiverFacade numberReceiverFacade;
     PlayerRepository playerRepository;
     WinnersRetriever winnerGenerator;
-
 
 
     public PlayersDto generateWinners() {
@@ -42,7 +39,8 @@ public class ResultCheckerFacade {
     }
 
     public ResultDto findByHash(String hash) {
-        Player player = playerRepository.findById(hash).orElseThrow(() -> new RuntimeException("Not found"));
+        Player player = playerRepository.findById(hash)
+                .orElseThrow(() -> new RuntimeException("Not found"));
         return ResultDto.builder()
                 .hash(hash)
                 .numbers(player.numbers())

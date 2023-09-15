@@ -1,20 +1,19 @@
 package pl.lotto.domain.resultchecker;
 
-import lombok.AllArgsConstructor;
-
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class WinnersRetriever {
+class WinnersRetriever {
     private final static int NUMBERS_WHEN_PLAYER_WON = 3;
 
     List<Player> retrieveWinners(List<Ticket> allTicketsByDate, Set<Integer> winningNumbers) {
         return allTicketsByDate.stream()
                 .map(ticket -> {
                     Set<Integer> hitNumbers = calculateHits(winningNumbers, ticket);
-                    return buildPlayer(ticket, hitNumbers);
+                    return buildResult(ticket, hitNumbers);
                 })
                 .toList();
     }
@@ -25,7 +24,7 @@ public class WinnersRetriever {
                 .collect(Collectors.toSet());
     }
 
-    private Player buildPlayer(Ticket ticket, Set<Integer> hitNumbers) {
+    private Player buildResult(Ticket ticket, Set<Integer> hitNumbers) {
         Player.PlayerBuilder builder = Player.builder();
         if (isWinner(hitNumbers)) {
             builder.isWinner(true);

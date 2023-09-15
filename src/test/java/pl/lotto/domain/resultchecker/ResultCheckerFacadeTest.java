@@ -1,5 +1,8 @@
 package pl.lotto.domain.resultchecker;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import pl.lotto.domain.numbergenerator.WinningNumbersGeneratorFacade;
 import pl.lotto.domain.numbergenerator.dto.WinningNumbersDto;
@@ -7,15 +10,10 @@ import pl.lotto.domain.numberreceiver.NumberReceiverFacade;
 import pl.lotto.domain.numberreceiver.dto.TicketDto;
 import pl.lotto.domain.resultchecker.dto.PlayersDto;
 import pl.lotto.domain.resultchecker.dto.ResultDto;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
-
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 
 class ResultCheckerFacadeTest {
 
@@ -49,7 +47,7 @@ class ResultCheckerFacadeTest {
         );
         ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().resultCheckerFacade(winningNumbersGeneratorFacade, numberReceiverFacade, playerRepository);
         //when
-        PlayersDto playersDto = resultCheckerFacade.generateWinners();
+        PlayersDto playersDto = resultCheckerFacade.generateResults();
         //then
         List<ResultDto> results = playersDto.results();
         ResultDto resultDto = ResultDto.builder()
@@ -76,6 +74,7 @@ class ResultCheckerFacadeTest {
         assertThat(results).contains(resultDto, resultDto1, resultDto2);
         String message = playersDto.message();
         assertThat(message).isEqualTo("Winners succeeded to retrieve");
+
     }
 
     @Test
@@ -86,10 +85,11 @@ class ResultCheckerFacadeTest {
                 .build());
         ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().resultCheckerFacade(winningNumbersGeneratorFacade, numberReceiverFacade, playerRepository);
         //when
-        PlayersDto playersDto = resultCheckerFacade.generateWinners();
+        PlayersDto playersDto = resultCheckerFacade.generateResults();
         //then
         String message = playersDto.message();
         assertThat(message).isEqualTo("Winners failed to retrieve");
+
     }
 
     @Test
@@ -100,7 +100,7 @@ class ResultCheckerFacadeTest {
                 .build());
         ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().resultCheckerFacade(winningNumbersGeneratorFacade, numberReceiverFacade, playerRepository);
         //when
-        PlayersDto playersDto = resultCheckerFacade.generateWinners();
+        PlayersDto playersDto = resultCheckerFacade.generateResults();
         //then
         String message = playersDto.message();
         assertThat(message).isEqualTo("Winners failed to retrieve");
@@ -133,10 +133,10 @@ class ResultCheckerFacadeTest {
                                 .build())
         );
         ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().resultCheckerFacade(winningNumbersGeneratorFacade, numberReceiverFacade, playerRepository);
-        resultCheckerFacade.generateWinners();
+        resultCheckerFacade.generateResults();
         //when
 
-        ResultDto resultDto = resultCheckerFacade.findByHash(hash);
+        ResultDto resultDto = resultCheckerFacade.findByTicketId(hash);
         //then
         ResultDto expectedResult = ResultDto.builder()
                 .hash(hash)
@@ -147,6 +147,4 @@ class ResultCheckerFacadeTest {
                 .build();
         assertThat(resultDto).isEqualTo(expectedResult);
     }
-
-
 }
